@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Auto">
+            <local:MarginWrapPanel x:Name="ImagePanel" Margin="0" ItemMargin="2"/>
+        </ScrollViewer>
     </Grid>
 </Window>
