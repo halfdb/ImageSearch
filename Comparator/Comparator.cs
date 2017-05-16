@@ -38,19 +38,29 @@ namespace ImageSearch
                     var img = Image.FromFile(filename);
                     Bitmaps.Add(new Bitmap(img));
                 }
+                folder = value;
+                Count = Bitmaps.Count;
             }
         }
         private string folder = null;
+        protected int Count;
 
         protected Comparator(string folder)
         {
             Folder = folder;
         }
 
-        public abstract double Compare(Bitmap picture1, Bitmap picture2);
+        public abstract double Compare(int storedIndex, Bitmap comparing);
         public IList<Bitmap> Search(Bitmap bitmap)
         {
-            throw new NotImplementedException();
+            var scores = new List<double>();
+            for (int i = 0; i < Count; i++)
+            {
+                scores.Add(Compare(i, bitmap));
+            }
+            var result = Bitmaps.ToArray();
+            Array.Sort(scores.ToArray(), result);
+            return result;
         }
 
         protected void DisposeImages()
