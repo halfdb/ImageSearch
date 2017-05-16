@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageSearch
 {
     public abstract class Comparator
     {
-        private static string[] supportedFormat =
+        private static readonly string[] supportedFormat =
         {
             "bmp",
             "jpg",
@@ -18,11 +16,11 @@ namespace ImageSearch
             //"gif",
         };
 
-        protected IList<Bitmap> Bitmaps = new List<Bitmap>();
+        protected readonly IList<Bitmap> Bitmaps = new List<Bitmap>();
 
         public string Folder
         {
-            get => folder;
+            get => _folder;
             set
             {
                 DisposeImages();
@@ -38,11 +36,11 @@ namespace ImageSearch
                     var img = Image.FromFile(filename);
                     Bitmaps.Add(new Bitmap(img));
                 }
-                folder = value;
+                _folder = value;
                 Count = Bitmaps.Count;
             }
         }
-        private string folder = null;
+        private string _folder = null;
         protected int Count;
 
         protected Comparator(string folder)
@@ -54,7 +52,7 @@ namespace ImageSearch
         public IList<Bitmap> Search(Bitmap bitmap)
         {
             var scores = new List<double>();
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 scores.Add(Compare(i, bitmap));
             }
@@ -69,6 +67,7 @@ namespace ImageSearch
             {
                 bitmap.Dispose();
             }
+            Bitmaps.Clear();
         }
 
         ~Comparator()
