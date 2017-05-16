@@ -14,10 +14,7 @@ namespace ImageSearch
         {
             Console.Write("initializing folder:");
             var folder = Console.ReadLine();
-            var time1 = Environment.TickCount;
             var comparator = ComparatorFactory.NewComparator(folder);
-            var time2 = Environment.TickCount;
-            Console.WriteLine($"time spent: {time2 - time1}ms");
             while (true)
             {
                 Console.Write("test picture:");
@@ -35,7 +32,7 @@ namespace ImageSearch
                                 var filename = pair.Item1;
                                 var distance = pair.Item2;
                                 var idx = filename.LastIndexOf(@"\") + 1;
-                                Console.WriteLine($"filname: {filename.Substring(idx)}, distance: {distance}");
+                                Console.WriteLine($"filename: {filename.Substring(idx)}, distance: {distance}");
                             }
                         }
                     }

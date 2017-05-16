@@ -8,7 +8,7 @@ namespace ImageSearch
 {
     public abstract class Comparator
     {
-        private static readonly string[] supportedFormat =
+        private static readonly string[] SupportedFormat =
         {
             "bmp",
             "jpg",
@@ -30,7 +30,7 @@ namespace ImageSearch
                 {
                     var splittedFilename = filename.Split('.');
                     var ext = splittedFilename[splittedFilename.Length - 1].ToLower();
-                    if (!supportedFormat.Contains(ext))
+                    if (!SupportedFormat.Contains(ext))
                     {
                         continue;
                     }

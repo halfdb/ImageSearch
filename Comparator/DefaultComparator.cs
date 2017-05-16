@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using static System.Math;
 
 namespace ImageSearch
@@ -14,14 +16,21 @@ namespace ImageSearch
         public const int B = G + 1;
         public const int Y = B + 1; // luminance
 
+        private Task task;
         public DefaultComparator(string folder)
             : base(folder)
         {
             Distributions = new Distribution[Count];
-            for (var i = 0; i < Count; i++)
+            task = Task.Run(() =>
             {
-                Distributions[i] = new Distribution(Bitmaps[i]);
-            }
+                var time1 = Environment.TickCount;
+                for (var i = 0; i < Count; i++)
+                {
+                    Distributions[i] = new Distribution(Bitmaps[i]);
+                }
+                var time2 = Environment.TickCount;
+                Console.WriteLine($"init finished. time spent: {time2 - time1}ms");
+            });
         }
 
         protected struct Distribution
@@ -73,6 +82,10 @@ namespace ImageSearch
             if (_cache is null || _cache.Item1 != comparing)
             {
                 _cache = new Tuple<Bitmap, Distribution>(comparing, new Distribution(comparing));
+            }
+            while (!task.IsCompleted)
+            {
+                Thread.Sleep(500);
             }
             var comparingDistribution = _cache.Item2;
             var distances = new double[Y+1];
