@@ -24,28 +24,29 @@ namespace ImageSearch
             }
         }
 
-        protected class Distribution
+        protected struct Distribution
         {
             private double pixelCount;
             public int PixelCount => (int)pixelCount;
 
-            private int[][] RGBY = { new int[ShadeCount], new int[ShadeCount], new int[ShadeCount], new int[ShadeCount] };
+            private int[,] RGBY;
 
             public Distribution(Bitmap bitmap)
             {
+                RGBY = new int[ShadeCount, Y+1];
                 var w = bitmap.Width;
                 var h = bitmap.Height;
                 pixelCount = w * h;
-                for (var i = 0; i < w; i++)
+                for (var j = 0; j < h; j++)
                 {
-                    for (var j = 0; j < h; j++)
+                    for (var i = 0; i < w; i++)
                     {
                         var color = bitmap.GetPixel(i, j);
-                        RGBY[R][color.R]++;
-                        RGBY[G][color.G]++;
-                        RGBY[B][color.B]++;
-                        var y = (int)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B);
-                        RGBY[Y][y]++;
+                        RGBY[color.R, R]++;
+                        RGBY[color.G, G]++;
+                        RGBY[color.B, B]++;
+                        var luminance = (int)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B);
+                        RGBY[luminance, Y]++;
                     }
                 }
             }
@@ -56,21 +57,26 @@ namespace ImageSearch
                 {
                     throw new ArgumentOutOfRangeException(nameof(rgb), rgb, $"[{R}, {Y}]");
                 }
-                else if (shade<0 || shade >= ShadeCount)
+                if (shade<0 || shade >= ShadeCount)
                 {
                     throw new ArgumentOutOfRangeException(nameof(shade), shade, $"[0, {ShadeCount})");
                 }
-                return RGBY[rgb][shade] / pixelCount;
+                return RGBY[shade, rgb] / pixelCount;
             }
         }
 
         protected IList<Distribution> Distributions;
+        private Tuple<Bitmap, Distribution>_cache;
 
         public override double Compare(int storedIndex, Bitmap comparing)
         {
-            var comparingDistribution = new Distribution(comparing);
-            var distances = new double[Y];
-            for (var color = 0; color < Y; color++)
+            if (_cache is null || _cache.Item1 != comparing)
+            {
+                _cache = new Tuple<Bitmap, Distribution>(comparing, new Distribution(comparing));
+            }
+            var comparingDistribution = _cache.Item2;
+            var distances = new double[Y+1];
+            for (var color = 0; color < Y+1; color++)
             {
                 double sum = 0;
                 for (var shade = 0; shade < ShadeCount; shade++)

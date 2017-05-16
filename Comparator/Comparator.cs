@@ -17,6 +17,7 @@ namespace ImageSearch
         };
 
         protected readonly IList<Bitmap> Bitmaps = new List<Bitmap>();
+        protected readonly IList<string> Filenames = new List<string>();
 
         public string Folder
         {
@@ -35,12 +36,13 @@ namespace ImageSearch
                     }
                     var img = Image.FromFile(filename);
                     Bitmaps.Add(new Bitmap(img));
+                    Filenames.Add(filename);
                 }
                 _folder = value;
                 Count = Bitmaps.Count;
             }
         }
-        private string _folder = null;
+        private string _folder;
         protected int Count;
 
         protected Comparator(string folder)
@@ -49,15 +51,49 @@ namespace ImageSearch
         }
 
         public abstract double Compare(int storedIndex, Bitmap comparing);
-        public IList<Bitmap> Search(Bitmap bitmap)
+
+        protected IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
         {
-            var scores = new List<double>();
+            distances = new double[Count];
+            var indices = new int[Count];
             for (var i = 0; i < Count; i++)
             {
-                scores.Add(Compare(i, bitmap));
+                indices[i] = i;
+                distances[i] = Compare(i, bitmap);
             }
-            var result = Bitmaps.ToArray();
-            Array.Sort(scores.ToArray(), result);
+            Array.Sort(distances as Array, indices);
+            return indices;
+        }
+
+        public IList<Bitmap> Search(Bitmap bitmap)
+        {
+            return Search(bitmap, out _);
+        }
+
+        public IList<Bitmap> Search(Bitmap bitmap, out IList<double> distances)
+        {
+            var indices = SearchIndices(bitmap, out distances);
+            var result = new Bitmap[Count];
+            for (var i = 0; i < indices.Count; i++)
+            {
+                result[i] = Bitmaps[indices[i]];
+            }
+            return result;
+        }
+
+        public IList<string> SearchFilenames(Bitmap bitmap)
+        {
+            return SearchFilenames(bitmap, out _);
+        }
+
+        public IList<string> SearchFilenames(Bitmap bitmap, out IList<double> distances)
+        {
+            var indices = SearchIndices(bitmap, out distances);
+            var result = new string[Count];
+            for (var i = 0; i < indices.Count; i++)
+            {
+                result[i] = Filenames[indices[i]];
+            }
             return result;
         }
 
