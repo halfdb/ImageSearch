@@ -7,10 +7,10 @@ namespace ImageSearch
     {
         public Thickness ItemMargin
         {
-            get => itemMargin;
+            get => _itemMargin;
             set
             {
-                itemMargin = value;
+                _itemMargin = value;
                 foreach (UIElement u in Children)
                 {
                     if (u is FrameworkElement f)
@@ -20,6 +20,6 @@ namespace ImageSearch
                 }
             }
         }
-        private Thickness itemMargin;
+        private Thickness _itemMargin;
     }
 }

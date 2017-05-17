@@ -18,11 +18,14 @@ namespace ImageSearch
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public sealed partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        internal Comparator Comparator;
+        internal ImageSource CurrentImage;
     }
 }
