@@ -16,12 +16,12 @@ namespace ImageSearch
         public const int B = G + 1;
         public const int Y = B + 1; // luminance
 
-        private Task task;
+        private readonly Task _initTask;
         public DefaultComparator(string folder)
             : base(folder)
         {
             Distributions = new Distribution[Count];
-            task = Task.Run(() =>
+            _initTask = Task.Run(() =>
             {
                 var time1 = Environment.TickCount;
                 for (var i = 0; i < Count; i++)
@@ -35,55 +35,54 @@ namespace ImageSearch
 
         protected struct Distribution
         {
-            private double pixelCount;
-            public int PixelCount => (int)pixelCount;
+            private readonly double _pixelCount;
 
-            private int[,] RGBY;
+            private readonly int[,] _rgby;
 
             public Distribution(Bitmap bitmap)
             {
-                RGBY = new int[ShadeCount, Y+1];
+                _rgby = new int[ShadeCount, Y+1];
                 var w = bitmap.Width;
                 var h = bitmap.Height;
-                pixelCount = w * h;
+                _pixelCount = w * h;
                 for (var j = 0; j < h; j++)
                 {
                     for (var i = 0; i < w; i++)
                     {
                         var color = bitmap.GetPixel(i, j);
-                        RGBY[color.R, R]++;
-                        RGBY[color.G, G]++;
-                        RGBY[color.B, B]++;
+                        _rgby[color.R, R]++;
+                        _rgby[color.G, G]++;
+                        _rgby[color.B, B]++;
                         var luminance = (int)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B);
-                        RGBY[luminance, Y]++;
+                        _rgby[luminance, Y]++;
                     }
                 }
             }
 
-            public double Probability(int rgb, int shade)
+            public double Probability(int rgby, int shade)
             {
-                if (rgb < R || rgb > Y)
+                if (rgby < R || rgby > Y)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(rgb), rgb, $"[{R}, {Y}]");
+                    throw new ArgumentOutOfRangeException(nameof(rgby), rgby, $"[{R}, {Y}]");
                 }
                 if (shade<0 || shade >= ShadeCount)
                 {
                     throw new ArgumentOutOfRangeException(nameof(shade), shade, $"[0, {ShadeCount})");
                 }
-                return RGBY[shade, rgb] / pixelCount;
+                return _rgby[shade, rgby] / _pixelCount;
             }
         }
 
-        protected IList<Distribution> Distributions;
+        protected readonly IList<Distribution> Distributions;
         private Tuple<Bitmap, Distribution>_cache;
 
-        public override double Compare(int storedIndex, Bitmap comparing)
+        protected override double Compare(int storedIndex, Bitmap comparing)
         {
             if (_cache is null || _cache.Item1 != comparing)
             {
                 _cache = new Tuple<Bitmap, Distribution>(comparing, new Distribution(comparing));
             }
-            while (!task.IsCompleted)
+            while (!_initTask.IsCompleted)
             {
                 Thread.Sleep(500);
             }

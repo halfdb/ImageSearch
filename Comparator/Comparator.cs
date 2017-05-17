@@ -50,7 +50,7 @@ namespace ImageSearch
             Folder = folder;
         }
 
-        public abstract double Compare(int storedIndex, Bitmap comparing);
+        protected abstract double Compare(int storedIndex, Bitmap comparing);
 
         protected IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
         {
@@ -104,6 +104,7 @@ namespace ImageSearch
                 bitmap.Dispose();
             }
             Bitmaps.Clear();
+            Filenames.Clear();
         }
 
         ~Comparator()
@@ -114,9 +115,6 @@ namespace ImageSearch
 
     public static class ComparatorFactory
     {
-        public static Comparator NewComparator(string folder)
-        {
-            return new DefaultComparator(folder);
-        }
+        public static Comparator NewComparator(string folder) => new DefaultComparator(folder);
     }
 }
