@@ -11,15 +11,15 @@
             <ColumnDefinition Width="25*"/>
             <ColumnDefinition Width="75*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="1" Margin="0" VerticalScrollBarVisibility="Auto">
-            <local:MarginWrapPanel x:Name="ImagePanel" Margin="0" ItemMargin="2" Background="#FFF0F0F0"/>
+        <ScrollViewer Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Auto">
+            <local:MarginWrapPanel x:Name="ImagePanel" Margin="0" ItemMargin="5" Background="#FFF0F0F0"/>
         </ScrollViewer>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="25*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style x:Key="Label" TargetType="TextBlock">
@@ -89,7 +89,7 @@
                    Name="Preview"
                    VerticalAlignment="Stretch"
                    HorizontalAlignment="Stretch"
-                   Margin="12"/>
+                   Margin="10"/>
         </Grid>
     </Grid>
 </Window>

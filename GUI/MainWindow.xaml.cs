@@ -71,7 +71,7 @@ namespace ImageSearch
             var path = PicturePath.Text;
             var task = Task.Run(() =>
             {
-                using (var bitmap = new Bitmap(Image.FromFile(path)))
+                using (var bitmap = new Bitmap(path))
                 {
                     return Comparator.SearchFilenames(bitmap);
                 }

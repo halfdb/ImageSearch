@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,13 +11,13 @@ namespace ImageSearch
     public class DefaultComparator : Comparator
     {
         public const int ShadeCount = 256;
-        public const int BucketSize = 64;
+        public const int BucketSize = 32;
         public const int R = 0;
         public const int G = R + 1;
         public const int B = G + 1;
         public const int Y = B + 1; // luminance
 
-        private readonly Task _initTask;
+        private Task _initTask;
         public DefaultComparator(string folder)
             : base(folder)
         {
@@ -29,7 +30,7 @@ namespace ImageSearch
                     Distributions[i] = new Distribution(Bitmaps[i]);
                 }
                 var time2 = Environment.TickCount;
-                Console.WriteLine($"init finished. time spent: {time2 - time1}ms");
+                Trace.WriteLine($"init finished. time spent: {time2 - time1}ms");
             });
         }
 
@@ -78,7 +79,8 @@ namespace ImageSearch
 
         protected override IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
         {
-            _initTask.Wait();
+            _initTask?.Wait();
+            _initTask = null;
             return base.SearchIndices(bitmap, out distances);
         }
 
@@ -100,6 +102,11 @@ namespace ImageSearch
                 }
                 distances[color] = -Log(sum);
             }
+            // give a diffrent weight to each color according to those in luminance calculating
+            // Y = 0.299 * R + 0.587 * G + 0.114 * B
+            distances[R] *= 0.299;
+            distances[G] *= 0.587;
+            distances[B] *= 0.114;
             return distances.Sum();
         }
     }
