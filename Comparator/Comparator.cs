@@ -53,7 +53,7 @@ namespace ImageSearch
 
         protected abstract double Compare(int storedIndex, Bitmap comparing);
 
-        protected IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
+        protected virtual IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
         {
             distances = new double[Count];
             var indices = new int[Count];

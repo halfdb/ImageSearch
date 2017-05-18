@@ -11,15 +11,15 @@
             <ColumnDefinition Width="25*"/>
             <ColumnDefinition Width="75*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="1" Margin="0" VerticalScrollBarVisibility="Auto">
             <local:MarginWrapPanel x:Name="ImagePanel" Margin="0" ItemMargin="2" Background="#FFF0F0F0"/>
         </ScrollViewer>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
                 <RowDefinition Height="4*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style x:Key="Label" TargetType="TextBlock">
@@ -27,7 +27,6 @@
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Margin" Value="13, 0, 0, 68"/>
-                    <Setter Property="Foreground" Value="Gray"/>
                 </Style>
                 <Style x:Key="PathBox" TargetType="TextBox">
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -71,26 +70,26 @@
                     Style="{StaticResource ChoosingButton}"
                     Name="ChoosePic"
                     Content="Choose Picture" Click="ChoosePic_Click"/>
-            <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="3"
                        Style="{StaticResource Label}"
                        Name="SearchLabel"
                        Text="Count"/>
-            <TextBox Grid.Row="2"
+            <TextBox Grid.Row="3"
                      Style="{StaticResource PathBox}"
                      IsEnabled="True"
                      IsReadOnly="False"
                      Name="SearchCount"
-                     Text="10"/>
-            <Button Grid.Row="2"
+                     Text="15"/>
+            <Button Grid.Row="3"
                     Style="{StaticResource ChoosingButton}"
                     Name="Search"
                     Content="Search" Click="Search_Click"/>
-            <Rectangle Fill="#FFF0F0F0" Margin="10" Grid.Row="3" StrokeThickness="0"/>
-            <Image Grid.Row="3"
+            <Rectangle Fill="#FFF0F0F0" Margin="10" Grid.Row="2" StrokeThickness="0"/>
+            <Image Grid.Row="2"
                    Name="Preview"
                    VerticalAlignment="Stretch"
                    HorizontalAlignment="Stretch"
-                   Margin="10"/>
+                   Margin="12"/>
         </Grid>
     </Grid>
 </Window>

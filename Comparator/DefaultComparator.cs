@@ -10,6 +10,7 @@ namespace ImageSearch
     public class DefaultComparator : Comparator
     {
         public const int ShadeCount = 256;
+        public const int BucketSize = 64;
         public const int R = 0;
         public const int G = R + 1;
         public const int B = G + 1;
@@ -40,7 +41,7 @@ namespace ImageSearch
 
             public Distribution(Bitmap bitmap)
             {
-                _rgby = new int[ShadeCount, Y+1];
+                _rgby = new int[ShadeCount / BucketSize, Y + 1];
                 var w = bitmap.Width;
                 var h = bitmap.Height;
                 _pixelCount = w * h;
@@ -49,11 +50,11 @@ namespace ImageSearch
                     for (var i = 0; i < w; i++)
                     {
                         var color = bitmap.GetPixel(i, j);
-                        _rgby[color.R, R]++;
-                        _rgby[color.G, G]++;
-                        _rgby[color.B, B]++;
+                        _rgby[color.R / BucketSize, R]++;
+                        _rgby[color.G / BucketSize, G]++;
+                        _rgby[color.B / BucketSize, B]++;
                         var luminance = (int)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B);
-                        _rgby[luminance, Y]++;
+                        _rgby[luminance / BucketSize, Y]++;
                     }
                 }
             }
@@ -68,12 +69,18 @@ namespace ImageSearch
                 {
                     throw new ArgumentOutOfRangeException(nameof(shade), shade, $"[0, {ShadeCount})");
                 }
-                return _rgby[shade, rgby] / _pixelCount;
+                return _rgby[shade / BucketSize, rgby] / _pixelCount;
             }
         }
 
         protected readonly IList<Distribution> Distributions;
         private Tuple<Bitmap, Distribution>_cache;
+
+        protected override IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
+        {
+            _initTask.Wait();
+            return base.SearchIndices(bitmap, out distances);
+        }
 
         protected override double Compare(int storedIndex, Bitmap comparing)
         {
@@ -83,7 +90,6 @@ namespace ImageSearch
             }
             var comparingDistribution = _cache.Item2;
             var distances = new double[Y+1];
-            _initTask.Wait();
             for (var color = 0; color < Y+1; color++)
             {
                 double sum = 0;
