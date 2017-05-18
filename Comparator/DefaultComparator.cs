@@ -78,16 +78,13 @@ namespace ImageSearch
 
         protected override double Compare(int storedIndex, Bitmap comparing)
         {
-            if (_cache is null || _cache.Item1 != comparing)
+            if (_cache?.Item1 != comparing)
             {
                 _cache = new Tuple<Bitmap, Distribution>(comparing, new Distribution(comparing));
             }
-            while (!_initTask.IsCompleted)
-            {
-                Thread.Sleep(500);
-            }
             var comparingDistribution = _cache.Item2;
             var distances = new double[Y+1];
+            _initTask.Wait();
             for (var color = 0; color < Y+1; color++)
             {
                 double sum = 0;
