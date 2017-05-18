@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImageSearch
 {
@@ -116,5 +117,27 @@ namespace ImageSearch
     public static class ComparatorFactory
     {
         public static Comparator NewComparator(string folder) => new DefaultComparator(folder);
+
+        public delegate double ComparingDelegate(Bitmap picture1, Bitmap picture2);
+
+        private sealed class DelegateComparator: Comparator
+        {
+            internal DelegateComparator(string folder, ComparingDelegate compare) : base(folder)
+            {
+                _compare = compare;
+            }
+
+            private readonly ComparingDelegate _compare;
+
+            protected override double Compare(int storedIndex, Bitmap comparing)
+            {
+                return _compare(Bitmaps[storedIndex], comparing);
+            }
+        }
+
+        public static Comparator FromDelegate(string folder, ComparingDelegate compare)
+        {
+            return new DelegateComparator(folder, compare);
+        }
     }
 }
