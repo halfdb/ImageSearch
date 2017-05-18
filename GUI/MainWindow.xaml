@@ -16,9 +16,10 @@
         </ScrollViewer>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="30*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style x:Key="Label" TargetType="TextBlock">
@@ -52,24 +53,41 @@
                        Text="Directory"/>
             <TextBox Grid.Row="0"
                      Style="{StaticResource PathBox}"
-                     Text="{Binding ElementName=Comparator, Path=Folder, FallbackValue=Directory}"
-                     />
+                     Text="Directory"
+                     Name="DirectoryPath"/>
             <Button Grid.Row="0"
                     Style="{StaticResource ChoosingButton}"
-                    Content="Choose Directory"/>
+                    Name="ChooseDir"
+                    Content="Choose Directory" Click="ChooseDir_Click"/>
             <TextBlock Grid.Row="1"
                        Style="{StaticResource Label}"
+                       Name="PictureLabel"
                        Text="Picture"/>
             <TextBox Grid.Row="1"
                      Style="{StaticResource PathBox}"
+                     Name="PicturePath"
                      Text="Picture"/>
             <Button Grid.Row="1"
                     Style="{StaticResource ChoosingButton}"
                     Name="ChoosePic"
-                    Content="Choose Picture"/>
-            <Rectangle Fill="#FFF0F0F0" Margin="10" Grid.Row="2" StrokeThickness="0"/>
-            <Image Grid.Row="2"
-                   Source="{Binding ElementName=CurrentImage}"
+                    Content="Choose Picture" Click="ChoosePic_Click"/>
+            <TextBlock Grid.Row="2"
+                       Style="{StaticResource Label}"
+                       Name="SearchLabel"
+                       Text="Count"/>
+            <TextBox Grid.Row="2"
+                     Style="{StaticResource PathBox}"
+                     IsEnabled="True"
+                     IsReadOnly="False"
+                     Name="SearchCount"
+                     Text="10"/>
+            <Button Grid.Row="2"
+                    Style="{StaticResource ChoosingButton}"
+                    Name="Search"
+                    Content="Search" Click="Search_Click"/>
+            <Rectangle Fill="#FFF0F0F0" Margin="10" Grid.Row="3" StrokeThickness="0"/>
+            <Image Grid.Row="3"
+                   Name="Preview"
                    VerticalAlignment="Stretch"
                    HorizontalAlignment="Stretch"
                    Margin="10"/>
