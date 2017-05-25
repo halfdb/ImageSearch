@@ -22,11 +22,11 @@ namespace ImageSearch
             InitializeComponent();
         }
 
-        private Comparator Comparator;
+        private Comparator _comparator;
 
         private readonly Dictionary<string, ImageControl> _imageCache = new Dictionary<string, ImageControl>();
 
-        private void ChooseDir_Click(object sender, RoutedEventArgs e)
+        private async void ChooseDir_Click(object sender, RoutedEventArgs e)
         {
             string path;
             using (var dialog = new FolderBrowserDialog {ShowNewFolderButton = false})
@@ -34,12 +34,12 @@ namespace ImageSearch
                 if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
                 path = dialog.SelectedPath;
             }
-            if (path == Comparator?.Folder)
+            if (path == _comparator?.Folder)
             {
                 return;
             }
             DirectoryPath.Text = path;
-            Comparator = ComparatorFactory.NewComparator(path);
+            _comparator = await Task.Run(() => new PositionWeightedComparator(path));
             _imageCache.Clear();
         }
 
@@ -73,7 +73,7 @@ namespace ImageSearch
             {
                 using (var bitmap = new Bitmap(path))
                 {
-                    return Comparator.SearchFilenames(bitmap);
+                    return _comparator.SearchFilenames(bitmap);
                 }
             });
 

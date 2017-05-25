@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DefaultComparator.cs" />
     <Compile Include="Comparator.cs" />
+    <Compile Include="PositionWeightedComparator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
