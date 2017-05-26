@@ -5,91 +5,95 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageSearch"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="960">
-    <Grid>
+        Title="MainWindow" Height="600" Width="960"
+        WindowStyle="None" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" ResizeMode="CanMinimize">
+    <Window.Background>
+        <ImageBrush ImageSource="UI.bmp" />
+    </Window.Background>
+    <Grid Margin="0, 50">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="75*"/>
+            <ColumnDefinition Width="230px"/>
+            <ColumnDefinition Width="10px"/>
+            <ColumnDefinition Width="720px"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Auto">
-            <local:MarginWrapPanel x:Name="ImagePanel" Margin="0" ItemMargin="5" Background="#FFF0F0F0"/>
+        <ScrollViewer Grid.Column="2" Margin="10" VerticalScrollBarVisibility="Auto">
+            <local:MarginWrapPanel x:Name="ImagePanel" Margin="0" ItemMargin="5" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown"/>
         </ScrollViewer>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20*"/>
-                <RowDefinition Height="20*"/>
                 <RowDefinition Height="35*"/>
-                <RowDefinition Height="25*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
-                <Style x:Key="Label" TargetType="TextBlock">
-                    <Setter Property="HorizontalAlignment" Value="Left"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Margin" Value="13, 0, 0, 68"/>
-                </Style>
-                <Style x:Key="PathBox" TargetType="TextBox">
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Margin" Value="10, 0, 10, 0"/>
-                    <Setter Property="IsEnabled" Value="False"/>
-                    <Setter Property="IsReadOnly" Value="True"/>
-                    <Setter Property="Height" Value="28"/>
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                </Style>
                 <Style x:Key="ChoosingButton" TargetType="Button">
                     <Setter Property="HorizontalAlignment" Value="Left"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Margin" Value="10, 80, 0, 0"/>
-                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="FontSize" Value="18"/>
+                    <Setter Property="FontFamily" Value="{StaticResource BanHei}"/>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <!--<ImageBrush ImageSource="Button.bmp"/>-->
+                            <SolidColorBrush Color="{StaticResource TransparentMetal}"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Width" Value="100"/>
                     <Setter Property="Height" Value="28"/>
                 </Style>
             </Grid.Resources>
-            <TextBlock Grid.Row="0"
-                       Style="{StaticResource Label}"
-                       Text="Directory"/>
-            <TextBox Grid.Row="0"
-                     Style="{StaticResource PathBox}"
-                     Text="Directory"
-                     Name="DirectoryPath"/>
-            <Button Grid.Row="0"
-                    Style="{StaticResource ChoosingButton}"
-                    Name="ChooseDir"
-                    Content="Choose Directory" Click="ChooseDir_Click"/>
-            <TextBlock Grid.Row="1"
-                       Style="{StaticResource Label}"
-                       Name="PictureLabel"
-                       Text="Picture"/>
-            <TextBox Grid.Row="1"
-                     Style="{StaticResource PathBox}"
-                     Name="PicturePath"
-                     Text="Picture"/>
+            <Image Grid.Row="0"
+                   HorizontalAlignment="Center" Height="200"
+                   Margin="0"
+                   VerticalAlignment="Top" Width="200"
+                   Source="Logo.png" />
             <Button Grid.Row="1"
                     Style="{StaticResource ChoosingButton}"
-                    Name="ChoosePic"
-                    Content="Choose Picture" Click="ChoosePic_Click"/>
-            <TextBlock Grid.Row="3"
-                       Style="{StaticResource Label}"
-                       Name="SearchLabel"
-                       Text="Count"/>
-            <TextBox Grid.Row="3"
-                     Style="{StaticResource PathBox}"
-                     IsEnabled="True"
-                     IsReadOnly="False"
-                     Name="SearchCount"
-                     Text="15"/>
-            <Button Grid.Row="3"
+                    Template="{StaticResource MetalButton}"
+                    Name="ChooseDir"
+                    Content="初始文件夹" Click="ChooseDir_Click"/>
+            <Button Grid.Row="1"
                     Style="{StaticResource ChoosingButton}"
-                    Name="Search"
-                    Content="Search" Click="Search_Click"/>
-            <Rectangle Fill="#FFF0F0F0" Margin="10" Grid.Row="2" StrokeThickness="0"/>
+                    Template="{StaticResource MetalButton}"
+                    Name="ChoosePic"
+                    HorizontalAlignment="Right"
+                    Content="选择图片" Click="ChoosePic_Click"/>
+            
+            <Rectangle Fill="{StaticResource TransparentMetalBrush}" Margin="10" Grid.Row="2" StrokeThickness="0"/>
             <Image Grid.Row="2"
                    Name="Preview"
                    VerticalAlignment="Stretch"
                    HorizontalAlignment="Stretch"
                    Margin="10"/>
+            <TextBlock Grid.Row="3"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="10, 0, 10, 60"
+                       Name="SearchLabel"
+                       Text="搜索数量" FontSize="18" FontFamily="{StaticResource BanHei}"/>
+            <TextBox Grid.Row="3"
+                     Name="SearchCount"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center"
+                     Margin="10, 0, 10, 60"
+                     Width="100"
+                     Background="LightGray"
+                     BorderThickness="0"
+                     Text="25"
+                     FontSize="14"
+                     FontFamily="{StaticResource BanHei}"
+                     Height="28"
+                     VerticalContentAlignment="Center" MaxLines="1"
+                     />
+            <Button Grid.Row="3"
+                    Style="{StaticResource ChoosingButton}"
+                    Template="{StaticResource MetalButton}"
+                    Width="200"
+                    Name="Search"
+                    Margin="10, 50, 0, 0"
+                    Content="搜索" Click="Search_Click"/>
         </Grid>
     </Grid>
 </Window>

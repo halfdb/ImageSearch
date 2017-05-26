@@ -22,7 +22,10 @@ namespace ImageSearch
             InitializeComponent();
         }
 
+
         private Comparator Comparator;
+        private string CurrentDirectory;
+        private string CurrentPicture;
 
         private readonly Dictionary<string, ImageControl> _imageCache = new Dictionary<string, ImageControl>();
 
@@ -38,7 +41,8 @@ namespace ImageSearch
             {
                 return;
             }
-            DirectoryPath.Text = path;
+            //DirectoryPath.Text = path;
+            CurrentDirectory = path;
             Comparator = ComparatorFactory.NewComparator(path);
             _imageCache.Clear();
         }
@@ -57,18 +61,19 @@ namespace ImageSearch
                 if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
                 path = dialog.FileNames[0];
             }
-            if (path == PicturePath.Text)
+            if (path == CurrentDirectory)
             {
                 return;
             }
 
-            PicturePath.Text = path;
+            //PicturePath.Text = path;
+            CurrentPicture = path;
             Preview.Source = ImageSourceFromPath(path);
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e)
         {
-            var path = PicturePath.Text;
+            var path = CurrentPicture;
             var task = Task.Run(() =>
             {
                 using (var bitmap = new Bitmap(path))
@@ -100,6 +105,11 @@ namespace ImageSearch
                 }
                 ImagePanel.Children.Add(image);
             }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }

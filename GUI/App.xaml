@@ -4,6 +4,40 @@
              xmlns:local="clr-namespace:ImageSearch"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Color x:Key="TransparentMetal" A="0x40" R="0xD0" G="0xD0" B="0xD0"/>
+        <SolidColorBrush x:Key="TransparentMetalBrush" Color="{StaticResource TransparentMetal}"/>
+        <ControlTemplate x:Key="MetalButton" TargetType="Button">
+            <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                <Rectangle Name="Rect" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{TemplateBinding Background}" Stroke="DarkGray" StrokeThickness="0.5"/>
+                <Rectangle Name="Shade" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Opacity="0">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
+                            <GradientStop Offset="0" Color="#00000000" />
+                            <GradientStop Offset="1" Color="#80808080" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <TextBlock
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    Text="{TemplateBinding  Content}"
+                    TextAlignment="Center"
+                    Foreground="{TemplateBinding Foreground}"
+                    FontFamily="{TemplateBinding FontFamily}"
+                    FontSize="{TemplateBinding FontSize}"
+                />
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Shade" Property="Opacity" Value="0.5" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="Shade" Property="Opacity" Value="1" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <FontFamily x:Key="BanHei">/GUI;component/Fonts/#MF BanHei (Noncommercial) Regular</FontFamily>
     </Application.Resources>
 </Application>

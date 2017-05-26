@@ -102,6 +102,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\MFBanhei.otf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -115,6 +116,15 @@
       <Project>{773e71c7-cae4-4bdf-b597-15a0aa02dbec}</Project>
       <Name>Comparator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Button.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
