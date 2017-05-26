@@ -17,12 +17,12 @@ namespace ImageSearch
         public const int B = G + 1;
         public const int Y = B + 1; // luminance
 
-        private Task _initTask;
+        protected Task InitTask;
         public DefaultComparator(string folder)
             : base(folder)
         {
-            Distributions = new Distribution[Count];
-            _initTask = Task.Run(() =>
+            Distributions = new IDistribution[Count];
+            InitTask = Task.Run(() =>
             {
                 var time1 = Environment.TickCount;
                 for (var i = 0; i < Count; i++)
@@ -34,15 +34,31 @@ namespace ImageSearch
             });
         }
 
-        protected struct Distribution
+        protected DefaultComparator()
         {
-            private readonly double _pixelCount;
+        }
+
+        protected interface IDistribution
+        {
+            void Initialize(Bitmap bitmap);
+            double Probability(int rgby, int shade);
+        }
+
+        private struct Distribution: IDistribution
+        {
+            private double _pixelCount;
 
             private readonly int[,] _rgby;
 
             public Distribution(Bitmap bitmap)
             {
                 _rgby = new int[ShadeCount / BucketSize, Y + 1];
+                _pixelCount = 0;
+                Initialize(bitmap);
+            }
+
+            public void Initialize(Bitmap bitmap)
+            {
                 var w = bitmap.Width;
                 var h = bitmap.Height;
                 _pixelCount = w * h;
@@ -74,25 +90,25 @@ namespace ImageSearch
             }
         }
 
-        protected readonly IList<Distribution> Distributions;
-        private Tuple<Bitmap, Distribution>_cache;
+        protected IList<IDistribution> Distributions;
+        protected Tuple<Bitmap, IDistribution> Cache;
 
         protected override IList<int> SearchIndices(Bitmap bitmap, out IList<double> distances)
         {
-            _initTask?.Wait();
-            _initTask = null;
+            InitTask?.Wait();
+            InitTask = null;
             return base.SearchIndices(bitmap, out distances);
         }
 
         protected override double Compare(int storedIndex, Bitmap comparing)
         {
-            if (_cache?.Item1 != comparing)
+            if (Cache?.Item1 != comparing)
             {
-                _cache = new Tuple<Bitmap, Distribution>(comparing, new Distribution(comparing));
+                Cache = new Tuple<Bitmap, IDistribution>(comparing, new Distribution(comparing));
             }
-            var comparingDistribution = _cache.Item2;
-            var distances = new double[Y+1];
-            for (var color = 0; color < Y+1; color++)
+            var comparingDistribution = Cache.Item2;
+            var distances = new double[Y];
+            for (var color = 0; color < Y; color++)
             {
                 double sum = 0;
                 for (var shade = 0; shade < ShadeCount; shade++)
@@ -104,9 +120,9 @@ namespace ImageSearch
             }
             // give a diffrent weight to each color according to those in luminance calculating
             // Y = 0.299 * R + 0.587 * G + 0.114 * B
-            distances[R] *= 0.299;
-            distances[G] *= 0.587;
-            distances[B] *= 0.114;
+            //distances[R] *= 0.299;
+            //distances[G] *= 0.587;
+            //distances[B] *= 0.114;
             return distances.Sum();
         }
     }

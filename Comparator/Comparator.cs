@@ -22,7 +22,7 @@ namespace ImageSearch
         public string Folder
         {
             get => _folder;
-            set
+            protected set
             {
                 DisposeImages();
                 var directory = Directory.EnumerateFiles(value);
@@ -48,6 +48,11 @@ namespace ImageSearch
         protected Comparator(string folder)
         {
             Folder = folder;
+        }
+
+        protected Comparator()
+        {
+            
         }
 
         protected abstract double Compare(int storedIndex, Bitmap comparing);

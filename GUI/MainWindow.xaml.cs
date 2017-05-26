@@ -29,7 +29,7 @@ namespace ImageSearch
 
         private readonly Dictionary<string, ImageControl> _imageCache = new Dictionary<string, ImageControl>();
 
-        private void ChooseDir_Click(object sender, RoutedEventArgs e)
+        private async void ChooseDir_Click(object sender, RoutedEventArgs e)
         {
             string path;
             using (var dialog = new FolderBrowserDialog {ShowNewFolderButton = false})
@@ -43,7 +43,7 @@ namespace ImageSearch
             }
             //DirectoryPath.Text = path;
             CurrentDirectory = path;
-            Comparator = ComparatorFactory.NewComparator(path);
+            Comparator = await Task.Run(() => new PositionWeightedComparator(path));
             _imageCache.Clear();
         }
 
