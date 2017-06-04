@@ -45,6 +45,7 @@ namespace ImageSearch
             CurrentDirectory = path;
             Comparator = await Task.Run(() => new PositionWeightedComparator(path));
             _imageCache.Clear();
+            Search.IsEnabled = !(CurrentPicture is null);
         }
 
         private static ImageSource ImageSourceFromPath(string path) => new BitmapImage(new Uri(path));
@@ -69,6 +70,7 @@ namespace ImageSearch
             //PicturePath.Text = path;
             CurrentPicture = path;
             Preview.Source = ImageSourceFromPath(path);
+            Search.IsEnabled = !(Comparator is null);
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e)
@@ -111,5 +113,9 @@ namespace ImageSearch
         {
             DragMove();
         }
+
+        private void MinButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
     }
 }

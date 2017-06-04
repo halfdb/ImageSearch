@@ -19,14 +19,48 @@
                 </Rectangle>
                 <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <TextBlock
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Stretch"
-                    Text="{TemplateBinding  Content}"
-                    TextAlignment="Center"
-                    Foreground="{TemplateBinding Foreground}"
-                    FontFamily="{TemplateBinding FontFamily}"
-                    FontSize="{TemplateBinding FontSize}"
-                />
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        Text="{TemplateBinding  Content}"
+                        TextAlignment="Center"
+                        Foreground="{TemplateBinding Foreground}"
+                        FontFamily="{TemplateBinding FontFamily}"
+                        FontSize="{TemplateBinding FontSize}"
+                    />
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Shade" Property="Opacity" Value="0.5" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="Shade" Property="Opacity" Value="1" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="CircleButton" TargetType="Button">
+            <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Width}">
+                <Ellipse Name="Circle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}"/>
+                <Ellipse Name="Shade" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Opacity="0">
+                    <Ellipse.Fill>
+                        <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
+                            <GradientStop Offset="0" Color="#00000000" />
+                            <GradientStop Offset="1" Color="#80808080" />
+                        </LinearGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        Text="{TemplateBinding  Content}"
+                        TextAlignment="Center"
+                        Foreground="{TemplateBinding Foreground}"
+                        FontFamily="{TemplateBinding FontFamily}"
+                        FontSize="{TemplateBinding FontSize}"
+                        FontWeight="{TemplateBinding FontWeight}"
+                        
+                    />
                 </Border>
             </Grid>
             <ControlTemplate.Triggers>
