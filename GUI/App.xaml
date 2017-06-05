@@ -6,6 +6,11 @@
     <Application.Resources>
         <Color x:Key="TransparentMetal" A="0x40" R="0xD0" G="0xD0" B="0xD0"/>
         <SolidColorBrush x:Key="TransparentMetalBrush" Color="{StaticResource TransparentMetal}"/>
+        <SolidColorBrush x:Key="TransparentDarkMetalBrush">
+            <SolidColorBrush.Color>
+                <Color A="0x40" R="0x20" G="0x20" B="0x20"></Color>
+            </SolidColorBrush.Color>
+        </SolidColorBrush>
         <ControlTemplate x:Key="MetalButton" TargetType="Button">
             <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
                 <Rectangle Name="Rect" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{TemplateBinding Background}" Stroke="DarkGray" StrokeThickness="0.5"/>

@@ -43,7 +43,7 @@ namespace ImageSearch
             }
             //DirectoryPath.Text = path;
             CurrentDirectory = path;
-            Comparator = await Task.Run(() => new PositionWeightedComparator(path));
+            Comparator = await Task.Run(() => new DefaultComparator(path));
             _imageCache.Clear();
             Search.IsEnabled = !(CurrentPicture is null);
         }

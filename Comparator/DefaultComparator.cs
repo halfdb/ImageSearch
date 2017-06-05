@@ -120,9 +120,9 @@ namespace ImageSearch
             }
             // give a diffrent weight to each color according to those in luminance calculating
             // Y = 0.299 * R + 0.587 * G + 0.114 * B
-            //distances[R] *= 0.299;
-            //distances[G] *= 0.587;
-            //distances[B] *= 0.114;
+            distances[R] *= 0.299;
+            distances[G] *= 0.587;
+            distances[B] *= 0.114;
             return distances.Sum();
         }
     }
